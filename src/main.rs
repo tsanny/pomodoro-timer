@@ -3,26 +3,25 @@ use std::{
     include_bytes,
     io::{self, Write},
     process::{Command, Stdio},
-    str::FromStr,
     sync::mpsc::channel,
     thread::{sleep, spawn},
     time::Duration,
 };
 
 fn main() -> Result<(), Box<dyn Error>> {
-    let mut input_interval_length = String::from_str("5")?;
-    let mut input_interval_count = String::from_str("2")?;
+    let mut input_interval_length = String::new();
+    let mut input_interval_count = String::new();
 
     // clear terminal and set cursor to top
-    //print!("\x1B[2J\x1B[1;1H");
-    //print!("Enter the length in seconds of each interval (max 65535): ");
-    //// ensure prompt above is printed immediately
-    //io::stdout().flush()?;
-    //io::stdin().read_line(&mut input_interval_length)?;
+    print!("\x1B[2J\x1B[1;1H");
+    print!("Enter the length in seconds of each interval (max 65535): ");
+    // ensure prompt above is printed immediately
+    io::stdout().flush()?;
+    io::stdin().read_line(&mut input_interval_length)?;
 
-    //print!("Enter the count of intervals (max 255): ");
-    //io::stdout().flush()?;
-    //io::stdin().read_line(&mut input_interval_count)?;
+    print!("Enter the count of intervals (max 255): ");
+    io::stdout().flush()?;
+    io::stdin().read_line(&mut input_interval_count)?;
 
     print!("\x1B[2J\x1B[1;1H");
     // convert input to numbers
