@@ -22,7 +22,7 @@ To prevent audio from not triggering on each interval end (due to the interval b
 
 ## Performance
 
-Performance was measured by using the following command: `time ./better-interval-timer <interval-length> <interval-count>`
+Performance was measured by commenting out the code requesting an interval length and count, modifying the input strings in the code instead.
 
 We expect the Ideal Time to be the warm up time (default 10 seconds) + (interval length * interval count) + sound effect at the end (2.856 seconds).
 
