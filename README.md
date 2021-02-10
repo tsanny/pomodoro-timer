@@ -46,14 +46,16 @@ The blog post states:
 
 > I'll run a proper test at some point, but now over 30 minutes the overall time should be ~30:15.00, which I think is as close as I'm going to get it and especially if you are using it for exercise, the 15 extra seconds won't hurt.
 
-Giving the benefit of the doubt, I'll assume the author has forgotten to take into account the 10 second warm-up and 2.856 second sound at the end in the claim of "15 extra seconds", so the drift was 2.144 seconds. Assuming a length of 1800 seconds and a count of 1 for the blog post:
+~~Giving the benefit of the doubt, I'll assume the author has forgotten to take into account the 10 second warm-up and 2.856 second sound at the end in the claim of "15 extra seconds", so the drift was 2.144 seconds. Assuming a length of 1800 seconds and a count of 1 for the blog post:~~
+
+The Author clarified that "15 extra seconds" referred to the warm up and sounds were added.
 
 |         Program          |    Time    | Ideal Time  |   Drift   |         Error          |
 | :----------------------: | :--------: | :---------: | :-------: | :--------------------: |
-|      interval-timer      | ~30:15.000 |  30:12.856  | 00:02.144 |   0.118% (3 s.f.)      |
+|      interval-timer      | ~30:15.000 |  30:00:000  | 00:15.000 |   0.833% (3 s.f.)      |
 |  better-interval-timer   |  30:13.086 |  30:12.856  | 00:00.230 |   0.0127% (3 s.f.)     |
 | better, w/ schedule_recv |  30:10.904 |  30:10.900  | 00:00.004 | **0.000221% (3 s.f.)** |
 
-This repository used to reduce drift by 89.3% (3 s.f.).
+This repository used to reduce drift by 98.47% (3 s.f.).
 
-With `schedule_recv`, it now reduces drift by 99.813% (3 s.f.).
+With `schedule_recv`, it now reduces drift by 99.97% (4 s.f.).
