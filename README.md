@@ -48,7 +48,7 @@ The blog post states:
 
 ~~Giving the benefit of the doubt, I'll assume the author has forgotten to take into account the 10 second warm-up and 2.856 second sound at the end in the claim of "15 extra seconds", so the drift was 2.144 seconds. Assuming a length of 1800 seconds and a count of 1 for the blog post:~~
 
-The Author clarified that "15 extra seconds" referred to the warm up and sounds were added.
+The author clarified that "15 extra seconds" referred to the drift before warm up and sounds were added to the code.
 
 |         Program          |    Time    | Ideal Time  |   Drift   |         Error          |
 | :----------------------: | :--------: | :---------: | :-------: | :--------------------: |
@@ -56,6 +56,6 @@ The Author clarified that "15 extra seconds" referred to the warm up and sounds 
 |  better-interval-timer   |  30:13.086 |  30:12.856  | 00:00.230 |   0.0127% (3 s.f.)     |
 | better, w/ schedule_recv |  30:10.904 |  30:10.900  | 00:00.004 | **0.000221% (3 s.f.)** |
 
-This repository used to reduce drift by 98.47% (3 s.f.).
+This repository used to reduce drift by 98.47% (4 s.f.).
 
 With `schedule_recv`, it now reduces drift by 99.97% (4 s.f.).
