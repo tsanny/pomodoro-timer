@@ -35,10 +35,10 @@ Interestingly, it appears the drift error decreases the longer the program is ru
 
 After switching to `schedule_recv`, performance was measured by using the following command: `time ./better-interval-timer <interval-length> <interval-count>`
 
-| Interval length (Seconds) | Interval count | Time (MM:SS.sss) | Ideal Time (MM:SS.ss) | Drift (MM:SS.sss) |         Error (%)         |
-| :-----------------------: | :------------: | :--------------: | :-------------------: | :---------------: | :-----------------------: |
-|            05             |       02       |    00:22.858     |       00:22.856       |     00:00.002     |   0.00875% (3 s.f.)       |
-|           900             |       02       |    30:12.860     |       30:12.856       |     00:00.004     | **0.00000221% (3 s.f.)**  |
+| Interval length (Seconds) | Interval count | Time (MM:SS.sss) | Ideal Time (MM:SS.ss) | Drift (MM:SS.sss) |        Error (%)        |
+| :-----------------------: | :------------: | :--------------: | :-------------------: | :---------------: | :---------------------: |
+|            05             |       02       |    00:20.902     |       00:20.900       |     00:00.002     |   0.00957% (3 s.f.)     |
+|           900             |       02       |    30:10.904     |       30:10.900       |     00:00.004     | **0.000221% (3 s.f.)**  |
 
 ## Comparison
 
@@ -48,11 +48,11 @@ The blog post states:
 
 Giving the benefit of the doubt, I'll assume the author has forgotten to take into account the 10 second warm-up and 2.856 second sound at the end in the claim of "15 extra seconds", so the drift was 2.144 seconds. Assuming a length of 1800 seconds and a count of 1 for the blog post:
 
-|         Program          |    Time    | Ideal Time  |   Drift   |          Error           |
-| :----------------------: | :--------: | :---------: | :-------: | :----------------------: |
-|      interval-timer      | ~30:15.000 |  30:12.856  | 00:02.144 |   0.118% (3 s.f.)        |
-|  better-interval-timer   |  30:13.086 |  30:12.856  | 00:00.230 |   0.0127% (3 s.f.)       |
-| better, w/ schedule_recv |  30:12.860 |  30:12.856  | 00:00.004 | **0.00000221% (3 s.f.)** |
+|         Program          |    Time    | Ideal Time  |   Drift   |         Error          |
+| :----------------------: | :--------: | :---------: | :-------: | :--------------------: |
+|      interval-timer      | ~30:15.000 |  30:12.856  | 00:02.144 |   0.118% (3 s.f.)      |
+|  better-interval-timer   |  30:13.086 |  30:12.856  | 00:00.230 |   0.0127% (3 s.f.)     |
+| better, w/ schedule_recv |  30:10.904 |  30:10.900  | 00:00.004 | **0.000221% (3 s.f.)** |
 
 This repository used to reduce drift by 89.3% (3 s.f.).
 
