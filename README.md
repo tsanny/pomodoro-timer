@@ -14,7 +14,7 @@ Three explicit threads in total are used:
 
 Additionally, reasonable limits have been set on the interval length and count (u16 and u8 respectively).
 
-To further reduce drift, the `schedule_recv` crate was used. Essentially, instead of using `std::thread::sleep`, we use a Binary Heap Priority Queue to track time, which is more accurate. This crate spawns its own thread, so the `main.rs` file no longer has an explicit spawn for the time thread. Now that there was only one MPSC channel communicating once at the end of each interval, changing from the standard library's MPSC to something like `flume` or `crossbeam-channel` did not have a noticeable impact on performance.
+To further reduce drift, the `schedule_recv` crate was used. Essentially, instead of using `std::thread::sleep`, we use a Condition Variable to not use CPU time until the condition (here, x time has passed) is met. This crate spawns its own thread, so the `main.rs` file no longer has an explicit spawn for the time thread. Now that there was only one MPSC channel communicating once at the end of each interval, changing from the standard library's MPSC to something like `flume` or `crossbeam-channel` did not have a noticeable impact on performance.
 
 `Figlet-rs` was also added to match the formatting of the original for feature-parity, despite lack of legibility when terminal width is low enough to cause line wrapping. Another addition was `structopt` to allow configuration (now including warm up time) in the calling line e.g. `better-interval-timer 5 2 -w 10`, and an informative `--help`. The impact of reading these arguments is not large enough to affect the drift measurement in the performance section below.
 
