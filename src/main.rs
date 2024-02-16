@@ -11,21 +11,27 @@ use structopt::StructOpt;
 
 #[derive(StructOpt)]
 struct Cli {
-    /// The length of each interval in seconds, minimum 1
-    #[structopt(default_value = "60")]
-    interval_length: u16,
+    /// The length of each focus interval in seconds, minimum 1
+    #[structopt(default_value = "10")]
+    focus_interval_length: u16,
+
+    /// The length of each rest interval in seconds, minimum 1
+    #[structopt(default_value = "5")]
+    rest_interval_length: u16,
+
     /// The number of intervals (after warm up), minimum 1
-    #[structopt(default_value = "2")]
+    #[structopt(default_value = "3")]
     interval_count: u8,
 
     /// The warmup time in seconds, minimum 1
-    #[structopt(short, long, default_value = "10")]
+    #[structopt(default_value = "5")]
     warmup_time: u16,
 }
 
 fn main() {
     let args = Cli::from_args();
-    let interval_length: u16 = 1.max(args.interval_length);
+    let focus_interval_length: u16 = 1.max(args.focus_interval_length);
+    let rest_interval_length: u16 = 1.max(args.rest_interval_length);
     let interval_count: u8 = 1.max(args.interval_count);
     let warmup_time: u16 = 1.max(args.warmup_time);
 
@@ -60,8 +66,10 @@ fn main() {
     });
 
     let mut current_interval = 0;
+    let mut is_rest_time = false;
     // initial warm-up time
     let mut time_sec = warmup_time;
+    let mut session_type = "Focus";
     let tick = periodic_ms(1000);
     loop {
         tick.recv().unwrap();
@@ -72,24 +80,38 @@ fn main() {
         // clear terminal and set cursor to start of first line
         print!("\x1B[2J\x1B[1;1H");
         // format time to have 0 before int when below 2sf
-        let text = format!(
-            "Interval {} of {}: {:02}:{:02}",
+        let interval_text = format!(
+            "{} {} of {}",
+            session_type,
             current_interval,
             interval_count,
+        ); 
+        let timer_text = format!(
+            "{:02}:{:02}",
             interval_minutes,
             time_sec - (interval_minutes * 60)
         );
         // pass formatted time to figlet and print
-        let figure = standard_font.convert(text.as_str());
-        println!("{}", figure.unwrap());
+        let interval_figure = standard_font.convert(interval_text.as_str());
+        let timer_figure = standard_font.convert(timer_text.as_str());
+        println!("{}", interval_figure.unwrap());
+        println!("{}", timer_figure.unwrap());
 
         // countdown for this interval has reached zero, play sound and move on
         if time_sec == 0 {
             // reset timer to interval length again
-            time_sec = interval_length;
+            if is_rest_time {
+                time_sec = rest_interval_length;
+                session_type = "Rest";
+            } else {
+                time_sec = focus_interval_length;
+                session_type = "Focus";
+                current_interval += 1;
+            }
+            is_rest_time ^= true;
 
-            audio_tx.send(()).unwrap();
-            current_interval += 1;
+            // audio_tx.send(()).unwrap();
+            audio_tx.send(());
             // when current == total + 1 (warm-up), we are done, so exit
             if current_interval == interval_count + 1 {
                 println!("Finished!");
